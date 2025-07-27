@@ -1,7 +1,7 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 
-const App: React.FC = () => {
+function App() {
   return (
     <Router>
       <div className="min-h-screen flex items-center justify-center">
@@ -16,6 +16,6 @@ const App: React.FC = () => {
       </div>
     </Router>
   );
-};
+}
 
 export default App; 
