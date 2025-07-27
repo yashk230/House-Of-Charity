@@ -1,5 +1,7 @@
-import { supabase } from './config';
+// import { supabase } from './config';
 import { Donor, NGO, Donation, Requirement } from '../types';
+
+// Temporary mock implementation until Supabase is properly set up
 
 // User operations
 export const userService = {

@@ -1,7 +1,13 @@
-import { User as SupabaseUser, Session } from '@supabase/supabase-js';
+// import { User as SupabaseUser, Session } from '@supabase/supabase-js';
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { supabase } from '../supabase/config';
+// import { supabase } from '../supabase/config';
 import { Donor, NGO } from '../types';
+
+// Temporary types until Supabase is installed
+type SupabaseUser = {
+  id: string;
+  email: string;
+};
 
 interface AuthContextType {
   currentUser: SupabaseUser | null;
@@ -26,129 +32,32 @@ export const useAuth = () => {
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<SupabaseUser | null>(null);
   const [userProfile, setUserProfile] = useState<Donor | NGO | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Set to false for now
 
-  useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setCurrentUser(session?.user ?? null);
-      if (session?.user) {
-        fetchUserProfile(session.user.id);
-      } else {
-        setLoading(false);
-      }
-    });
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        setCurrentUser(session?.user ?? null);
-        
-        if (session?.user) {
-          await fetchUserProfile(session.user.id);
-        } else {
-          setUserProfile(null);
-        }
-        
-        setLoading(false);
-      }
-    );
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  const fetchUserProfile = async (userId: string) => {
-    try {
-      const { data, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('id', userId)
-        .single();
-
-      if (error) {
-        console.error('Error fetching user profile:', error);
-        setUserProfile(null);
-      } else {
-        setUserProfile(data as Donor | NGO);
-      }
-    } catch (error) {
-      console.error('Error fetching user profile:', error);
-      setUserProfile(null);
-    }
-  };
-
+  // Temporary mock implementation until Supabase is properly set up
   const login = async (email: string, password: string) => {
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      
-      if (error) throw error;
-    } catch (error) {
-      throw error;
-    }
+    // Mock login - will be replaced with Supabase
+    console.log('Mock login:', email, password);
+    throw new Error('Supabase not configured yet');
   };
 
   const register = async (email: string, password: string, userData: Partial<Donor | NGO>) => {
-    try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-      });
-      
-      if (error) throw error;
-
-      if (data.user) {
-        const newUser = {
-          id: data.user.id,
-          email: data.user.email!,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-          ...userData,
-        };
-
-        const { error: profileError } = await supabase
-          .from('users')
-          .insert([newUser]);
-
-        if (profileError) throw profileError;
-      }
-    } catch (error) {
-      throw error;
-    }
+    // Mock register - will be replaced with Supabase
+    console.log('Mock register:', email, password, userData);
+    throw new Error('Supabase not configured yet');
   };
 
   const logout = async () => {
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-    } catch (error) {
-      throw error;
-    }
+    // Mock logout - will be replaced with Supabase
+    console.log('Mock logout');
+    setCurrentUser(null);
+    setUserProfile(null);
   };
 
   const updateProfile = async (data: Partial<Donor | NGO>) => {
-    if (!currentUser) throw new Error('No user logged in');
-    
-    try {
-      const updatedProfile = {
-        ...userProfile,
-        ...data,
-        updated_at: new Date().toISOString(),
-      };
-      
-      const { error } = await supabase
-        .from('users')
-        .update(updatedProfile)
-        .eq('id', currentUser.id);
-
-      if (error) throw error;
-      
-      setUserProfile(updatedProfile as Donor | NGO);
-    } catch (error) {
-      throw error;
-    }
+    // Mock update - will be replaced with Supabase
+    console.log('Mock update profile:', data);
+    throw new Error('Supabase not configured yet');
   };
 
   const value: AuthContextType = {
