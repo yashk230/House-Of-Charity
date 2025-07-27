@@ -1,92 +1,68 @@
 export interface User {
   id: string;
   email: string;
-  name: string;
-  userType: 'donor' | 'ngo';
-  createdAt: Date;
-  updatedAt: Date;
+  name?: string;
+  user_type: 'donor' | 'ngo';
+  phone?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  pincode?: string;
+  description?: string;
+  website?: string;
+  logo_url?: string;
+  verified?: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface Donor extends User {
-  userType: 'donor';
-  phone?: string;
-  address?: string;
-  connectedNGOs: string[]; // Array of NGO IDs
-  donationHistory: Donation[];
+  user_type: 'donor';
 }
 
 export interface NGO extends User {
-  userType: 'ngo';
-  organizationName: string;
-  description: string;
-  mission: string;
-  website?: string;
-  phone: string;
-  address: string;
-  logo?: string;
-  verified: boolean;
-  works: NGOWork[];
-  awards: NGOAward[];
-  requirements: NGORequirement[];
-  connectedDonors: string[]; // Array of donor IDs
-  donationHistory: Donation[];
-}
-
-export interface NGOWork {
-  id: string;
-  title: string;
-  description: string;
-  image?: string;
-  date: Date;
-  impact: string;
-  location: string;
-}
-
-export interface NGOAward {
-  id: string;
-  title: string;
-  description: string;
-  year: number;
-  issuer: string;
-  image?: string;
-}
-
-export interface NGORequirement {
-  id: string;
-  title: string;
-  description: string;
-  category: 'money' | 'food' | 'essentials' | 'other';
-  quantity?: number;
-  unit?: string;
-  urgency: 'low' | 'medium' | 'high';
-  deadline?: Date;
-  createdAt: Date;
-  status: 'active' | 'fulfilled' | 'expired';
+  user_type: 'ngo';
+  // Additional NGO-specific fields are handled in the base User interface
 }
 
 export interface Donation {
   id: string;
-  donorId: string;
-  ngoId: string;
-  type: 'money' | 'food' | 'essentials' | 'other';
-  amount?: number;
-  description: string;
-  quantity?: number;
-  unit?: string;
-  status: 'pending' | 'confirmed' | 'delivered' | 'cancelled';
-  createdAt: Date;
-  updatedAt: Date;
-  donorName: string;
-  ngoName: string;
+  donor_id: string;
+  ngo_id: string;
+  amount: number;
+  currency: string;
+  payment_method?: string;
+  transaction_id?: string;
+  status: 'pending' | 'completed' | 'failed' | 'cancelled';
+  message?: string;
+  anonymous: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Requirement {
+  id: string;
+  ngo_id: string;
+  title: string;
+  description?: string;
+  category?: string;
+  amount_needed?: number;
+  currency: string;
+  priority: 'low' | 'medium' | 'high' | 'urgent';
+  status: 'active' | 'fulfilled' | 'cancelled';
+  deadline?: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface Notification {
   id: string;
-  userId: string;
+  user_id: string;
   title: string;
   message: string;
   type: 'donation' | 'requirement' | 'connection' | 'general';
   read: boolean;
-  createdAt: Date;
-  relatedId?: string; // ID of related donation, requirement, etc.
+  created_at: string;
+  related_id?: string; // ID of related donation, requirement, etc.
 } 

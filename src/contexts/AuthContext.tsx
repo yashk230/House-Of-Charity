@@ -1,17 +1,10 @@
-import {
-    createUserWithEmailAndPassword,
-    User as FirebaseUser,
-    onAuthStateChanged,
-    signInWithEmailAndPassword,
-    signOut
-} from 'firebase/auth';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { User as SupabaseUser, Session } from '@supabase/supabase-js';
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { auth, db } from '../firebase/config';
+import { supabase } from '../supabase/config';
 import { Donor, NGO } from '../types';
 
 interface AuthContextType {
-  currentUser: FirebaseUser | null;
+  currentUser: SupabaseUser | null;
   userProfile: Donor | NGO | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
@@ -31,33 +24,67 @@ export const useAuth = () => {
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
+  const [currentUser, setCurrentUser] = useState<SupabaseUser | null>(null);
   const [userProfile, setUserProfile] = useState<Donor | NGO | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setCurrentUser(user);
-      
-      if (user) {
-        // Fetch user profile from Firestore
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
-        if (userDoc.exists()) {
-          setUserProfile(userDoc.data() as Donor | NGO);
-        }
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setCurrentUser(session?.user ?? null);
+      if (session?.user) {
+        fetchUserProfile(session.user.id);
       } else {
-        setUserProfile(null);
+        setLoading(false);
       }
-      
-      setLoading(false);
     });
 
-    return unsubscribe;
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        setCurrentUser(session?.user ?? null);
+        
+        if (session?.user) {
+          await fetchUserProfile(session.user.id);
+        } else {
+          setUserProfile(null);
+        }
+        
+        setLoading(false);
+      }
+    );
+
+    return () => subscription.unsubscribe();
   }, []);
+
+  const fetchUserProfile = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', userId)
+        .single();
+
+      if (error) {
+        console.error('Error fetching user profile:', error);
+        setUserProfile(null);
+      } else {
+        setUserProfile(data as Donor | NGO);
+      }
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+      setUserProfile(null);
+    }
+  };
 
   const login = async (email: string, password: string) => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      
+      if (error) throw error;
     } catch (error) {
       throw error;
     }
@@ -65,17 +92,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const register = async (email: string, password: string, userData: Partial<Donor | NGO>) => {
     try {
-      const { user } = await createUserWithEmailAndPassword(auth, email, password);
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
       
-      const newUser = {
-        id: user.uid,
-        email: user.email!,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        ...userData,
-      };
+      if (error) throw error;
 
-      await setDoc(doc(db, 'users', user.uid), newUser);
+      if (data.user) {
+        const newUser = {
+          id: data.user.id,
+          email: data.user.email!,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          ...userData,
+        };
+
+        const { error: profileError } = await supabase
+          .from('users')
+          .insert([newUser]);
+
+        if (profileError) throw profileError;
+      }
     } catch (error) {
       throw error;
     }
@@ -83,7 +121,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = async () => {
     try {
-      await signOut(auth);
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
     } catch (error) {
       throw error;
     }
@@ -96,10 +135,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const updatedProfile = {
         ...userProfile,
         ...data,
-        updatedAt: new Date(),
+        updated_at: new Date().toISOString(),
       };
       
-      await setDoc(doc(db, 'users', currentUser.uid), updatedProfile);
+      const { error } = await supabase
+        .from('users')
+        .update(updatedProfile)
+        .eq('id', currentUser.id);
+
+      if (error) throw error;
+      
       setUserProfile(updatedProfile as Donor | NGO);
     } catch (error) {
       throw error;
