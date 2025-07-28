@@ -44,28 +44,18 @@ const Register: React.FC = () => {
       if (userType === 'donor') {
         const donorData: Partial<Donor> = {
           name: data.name,
-          userType: 'donor',
+          user_type: 'donor',
           phone: data.phone,
           address: data.address,
-          connectedNGOs: [],
-          donationHistory: [],
         };
         await registerUser(data.email, data.password, donorData);
       } else {
         const ngoData: Partial<NGO> = {
           name: data.name,
-          userType: 'ngo',
-          organizationName: data.organizationName || '',
+          user_type: 'ngo',
           phone: data.phone || '',
           address: data.address || '',
-          description: '',
-          mission: '',
-          verified: false,
-          works: [],
-          awards: [],
-          requirements: [],
-          connectedDonors: [],
-          donationHistory: [],
+          description: data.organizationName || '',
         };
         await registerUser(data.email, data.password, ngoData);
       }

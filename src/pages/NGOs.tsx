@@ -17,58 +17,37 @@ const NGOs: React.FC = () => {
         id: '1',
         email: 'info@savethechildren.org',
         name: 'John Smith',
-        userType: 'ngo',
-        organizationName: 'Save the Children',
-        description: 'Working to improve the lives of children through better education, health care, and economic opportunities.',
-        mission: 'To help children in need around the world',
+        user_type: 'ngo',
+        description: 'Save the Children - Working to improve the lives of children through better education, health care, and economic opportunities.',
         phone: '+1 (555) 123-4567',
         address: '123 Charity St, New York, NY 10001',
         verified: true,
-        works: [],
-        awards: [],
-        requirements: [],
-        connectedDonors: [],
-        donationHistory: [],
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       },
       {
         id: '2',
         email: 'contact@foodbank.org',
         name: 'Sarah Johnson',
-        userType: 'ngo',
-        organizationName: 'Food Bank International',
-        description: 'Providing food assistance to families in need across the country.',
-        mission: 'Ending hunger one meal at a time',
+        user_type: 'ngo',
+        description: 'Food Bank International - Providing food assistance to families in need across the country.',
         phone: '+1 (555) 987-6543',
         address: '456 Hope Ave, Los Angeles, CA 90210',
         verified: true,
-        works: [],
-        awards: [],
-        requirements: [],
-        connectedDonors: [],
-        donationHistory: [],
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       },
       {
         id: '3',
         email: 'hello@cleanwater.org',
         name: 'Michael Brown',
-        userType: 'ngo',
-        organizationName: 'Clean Water Initiative',
-        description: 'Bringing clean water to communities in developing countries.',
-        mission: 'Access to clean water for everyone',
+        user_type: 'ngo',
+        description: 'Clean Water Initiative - Bringing clean water to communities in developing countries.',
         phone: '+1 (555) 456-7890',
         address: '789 Water Way, Seattle, WA 98101',
         verified: false,
-        works: [],
-        awards: [],
-        requirements: [],
-        connectedDonors: [],
-        donationHistory: [],
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       },
     ];
 
@@ -83,9 +62,8 @@ const NGOs: React.FC = () => {
     // Filter by search term
     if (searchTerm) {
       filtered = filtered.filter(ngo =>
-        ngo.organizationName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        ngo.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        ngo.mission.toLowerCase().includes(searchTerm.toLowerCase())
+        ngo.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        ngo.description.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 

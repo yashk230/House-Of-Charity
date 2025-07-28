@@ -55,7 +55,7 @@ const Dashboard: React.FC = () => {
         },
       ]);
 
-      if (userProfile.userType === 'donor') {
+      if (userProfile.user_type === 'donor') {
         setStats({
           totalDonations: 15,
           totalAmount: 2500,
@@ -84,7 +84,7 @@ const Dashboard: React.FC = () => {
     );
   }
 
-  const isDonor = userProfile.userType === 'donor';
+  const isDonor = userProfile.user_type === 'donor';
 
   return (
     <div className="min-h-screen bg-gray-50">
