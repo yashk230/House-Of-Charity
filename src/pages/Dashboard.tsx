@@ -191,10 +191,10 @@ const Dashboard: React.FC = () => {
                           {new Date(donation.created_at).toLocaleDateString()}
                         </p>
                         <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                          donation.status === 'confirmed' ? 'bg-green-100 text-green-800' :
+                          donation.status === 'completed' ? 'bg-green-100 text-green-800' :
                           donation.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                          donation.status === 'delivered' ? 'bg-blue-100 text-blue-800' :
-                          'bg-red-100 text-red-800'
+                          donation.status === 'failed' ? 'bg-red-100 text-red-800' :
+                          'bg-gray-100 text-gray-800'
                         }`}>
                           {donation.status}
                         </span>
