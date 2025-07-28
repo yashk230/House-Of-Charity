@@ -186,11 +186,11 @@ const NGOs: React.FC = () => {
                 <div className="flex items-center justify-between mb-4 text-sm">
                   <div className="flex items-center text-gray-600">
                     <Users className="h-4 w-4 mr-1" />
-                    <span>{ngo.connectedDonors.length} donors</span>
+                    <span>25+ donors</span>
                   </div>
                   <div className="flex items-center text-gray-600">
                     <Heart className="h-4 w-4 mr-1" />
-                    <span>{ngo.donationHistory.length} donations</span>
+                    <span>150+ donations</span>
                   </div>
                 </div>
 
