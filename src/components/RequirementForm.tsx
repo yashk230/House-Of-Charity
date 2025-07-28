@@ -2,7 +2,7 @@ import { Bell, Calendar, DollarSign, Package } from 'lucide-react';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { NGORequirement } from '../types';
+import { Requirement } from '../types';
 
 interface RequirementFormProps {
   onSuccess?: () => void;
@@ -37,17 +37,16 @@ const RequirementForm: React.FC<RequirementFormProps> = ({ onSuccess, onCancel }
   const onSubmit = async (data: RequirementFormData) => {
     setIsLoading(true);
     try {
-      // Mock requirement creation - in real app, save to Firebase
-      const requirement: Partial<NGORequirement> = {
+      // Mock requirement creation - in real app, save to Supabase
+      const requirement: Partial<Requirement> = {
         title: data.title,
         description: data.description,
         category: data.category,
-        quantity: data.quantity,
-        unit: data.unit,
-        urgency: data.urgency,
-        deadline: data.deadline ? new Date(data.deadline) : undefined,
+        amount_needed: data.quantity,
+        currency: 'USD',
+        priority: data.urgency,
+        deadline: data.deadline,
         status: 'active',
-        createdAt: new Date(),
       };
 
       console.log('Creating requirement:', requirement);
