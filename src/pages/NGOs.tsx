@@ -157,7 +157,7 @@ const NGOs: React.FC = () => {
                         </span>
                       )}
                     </div>
-                    <p className="text-sm text-gray-600 mb-2">{ngo.mission}</p>
+                    <p className="text-sm text-gray-600 mb-2">{ngo.description}</p>
                   </div>
                 </div>
 
