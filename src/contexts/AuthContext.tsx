@@ -32,7 +32,7 @@ export const useAuth = () => {
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<SupabaseUser | null>(null);
   const [userProfile, setUserProfile] = useState<Donor | NGO | null>(null);
-  const [loading, setLoading] = useState(false); // Set to false for now
+  const [loading] = useState(false); // Set to false for now
 
   // Temporary mock implementation until Supabase is properly set up
   const login = async (email: string, password: string) => {
