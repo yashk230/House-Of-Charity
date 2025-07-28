@@ -39,17 +39,14 @@ const DonationForm: React.FC<DonationFormProps> = ({ ngoId, ngoName, onSuccess, 
   const onSubmit = async (data: DonationFormData) => {
     setIsLoading(true);
     try {
-      // Mock donation creation - in real app, save to Firebase
+      // Mock donation creation - in real app, save to Supabase
       const donation: Partial<Donation> = {
-        ngoId,
-        type: data.type,
+        ngo_id: ngoId,
         amount: data.amount,
-        description: data.description,
-        quantity: data.quantity,
-        unit: data.unit,
+        currency: 'USD',
         status: 'pending',
-        ngoName,
-        donorName: 'Current User', // Get from auth context
+        message: data.description,
+        anonymous: false,
       };
 
       console.log('Creating donation:', donation);
