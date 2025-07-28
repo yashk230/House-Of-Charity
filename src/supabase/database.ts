@@ -6,153 +6,89 @@ import { Donation, Donor, NGO, Requirement } from '../types';
 // User operations
 export const userService = {
   async getUserById(id: string) {
-    const { data, error } = await supabase
-      .from('users')
-      .select('*')
-      .eq('id', id)
-      .single();
-    
-    if (error) throw error;
-    return data as Donor | NGO;
+    // Mock implementation until Supabase is set up
+    console.log('Mock getUserById:', id);
+    throw new Error('Supabase not configured yet');
   },
 
   async updateUser(id: string, updates: Partial<Donor | NGO>) {
-    const { data, error } = await supabase
-      .from('users')
-      .update({ ...updates, updated_at: new Date().toISOString() })
-      .eq('id', id)
-      .select()
-      .single();
-    
-    if (error) throw error;
-    return data as Donor | NGO;
+    // Mock implementation until Supabase is set up
+    console.log('Mock updateUser:', id, updates);
+    throw new Error('Supabase not configured yet');
   }
 };
 
 // Donation operations
 export const donationService = {
   async createDonation(donation: Omit<Donation, 'id' | 'created_at'>) {
-    const { data, error } = await supabase
-      .from('donations')
-      .insert([{ ...donation, created_at: new Date().toISOString() }])
-      .select()
-      .single();
-    
-    if (error) throw error;
-    return data as Donation;
+    // Mock implementation until Supabase is set up
+    console.log('Mock createDonation:', donation);
+    throw new Error('Supabase not configured yet');
   },
 
   async getDonationsByDonor(donorId: string) {
-    const { data, error } = await supabase
-      .from('donations')
-      .select('*')
-      .eq('donor_id', donorId)
-      .order('created_at', { ascending: false });
-    
-    if (error) throw error;
-    return data as Donation[];
+    // Mock implementation until Supabase is set up
+    console.log('Mock getDonationsByDonor:', donorId);
+    throw new Error('Supabase not configured yet');
   },
 
   async getDonationsByNGO(ngoId: string) {
-    const { data, error } = await supabase
-      .from('donations')
-      .select('*')
-      .eq('ngo_id', ngoId)
-      .order('created_at', { ascending: false });
-    
-    if (error) throw error;
-    return data as Donation[];
+    // Mock implementation until Supabase is set up
+    console.log('Mock getDonationsByNGO:', ngoId);
+    throw new Error('Supabase not configured yet');
   },
 
   async getAllDonations() {
-    const { data, error } = await supabase
-      .from('donations')
-      .select('*')
-      .order('created_at', { ascending: false });
-    
-    if (error) throw error;
-    return data as Donation[];
+    // Mock implementation until Supabase is set up
+    console.log('Mock getAllDonations');
+    throw new Error('Supabase not configured yet');
   }
 };
 
 // Requirement operations
 export const requirementService = {
   async createRequirement(requirement: Omit<Requirement, 'id' | 'created_at'>) {
-    const { data, error } = await supabase
-      .from('requirements')
-      .insert([{ ...requirement, created_at: new Date().toISOString() }])
-      .select()
-      .single();
-    
-    if (error) throw error;
-    return data as Requirement;
+    // Mock implementation until Supabase is set up
+    console.log('Mock createRequirement:', requirement);
+    throw new Error('Supabase not configured yet');
   },
 
   async getRequirementsByNGO(ngoId: string) {
-    const { data, error } = await supabase
-      .from('requirements')
-      .select('*')
-      .eq('ngo_id', ngoId)
-      .order('created_at', { ascending: false });
-    
-    if (error) throw error;
-    return data as Requirement[];
+    // Mock implementation until Supabase is set up
+    console.log('Mock getRequirementsByNGO:', ngoId);
+    throw new Error('Supabase not configured yet');
   },
 
   async getAllRequirements() {
-    const { data, error } = await supabase
-      .from('requirements')
-      .select('*')
-      .order('created_at', { ascending: false });
-    
-    if (error) throw error;
-    return data as Requirement[];
+    // Mock implementation until Supabase is set up
+    console.log('Mock getAllRequirements');
+    throw new Error('Supabase not configured yet');
   },
 
   async updateRequirement(id: string, updates: Partial<Requirement>) {
-    const { data, error } = await supabase
-      .from('requirements')
-      .update({ ...updates, updated_at: new Date().toISOString() })
-      .eq('id', id)
-      .select()
-      .single();
-    
-    if (error) throw error;
-    return data as Requirement;
+    // Mock implementation until Supabase is set up
+    console.log('Mock updateRequirement:', id, updates);
+    throw new Error('Supabase not configured yet');
   },
 
   async deleteRequirement(id: string) {
-    const { error } = await supabase
-      .from('requirements')
-      .delete()
-      .eq('id', id);
-    
-    if (error) throw error;
+    // Mock implementation until Supabase is set up
+    console.log('Mock deleteRequirement:', id);
+    throw new Error('Supabase not configured yet');
   }
 };
 
 // NGO operations
 export const ngoService = {
   async getAllNGOs() {
-    const { data, error } = await supabase
-      .from('users')
-      .select('*')
-      .eq('user_type', 'ngo')
-      .order('created_at', { ascending: false });
-    
-    if (error) throw error;
-    return data as NGO[];
+    // Mock implementation until Supabase is set up
+    console.log('Mock getAllNGOs');
+    throw new Error('Supabase not configured yet');
   },
 
   async getNGOById(id: string) {
-    const { data, error } = await supabase
-      .from('users')
-      .select('*')
-      .eq('id', id)
-      .eq('user_type', 'ngo')
-      .single();
-    
-    if (error) throw error;
-    return data as NGO;
+    // Mock implementation until Supabase is set up
+    console.log('Mock getNGOById:', id);
+    throw new Error('Supabase not configured yet');
   }
 }; 
