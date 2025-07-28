@@ -62,8 +62,8 @@ const NGOs: React.FC = () => {
     // Filter by search term
     if (searchTerm) {
       filtered = filtered.filter(ngo =>
-        ngo.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        ngo.description.toLowerCase().includes(searchTerm.toLowerCase())
+        (ngo.name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+        (ngo.description?.toLowerCase() || '').includes(searchTerm.toLowerCase())
       );
     }
 
