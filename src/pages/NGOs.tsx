@@ -148,7 +148,7 @@ const NGOs: React.FC = () => {
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       <h3 className="text-lg font-semibold text-gray-900">
-                        {ngo.organizationName}
+                        {ngo.name}
                       </h3>
                       {ngo.verified && (
                         <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
