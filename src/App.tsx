@@ -1,13 +1,12 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Layout from './components/Layout/Layout';
-import Home from './pages/Home';
+import { AuthProvider } from './contexts/AuthContext';
 import Dashboard from './pages/Dashboard';
+import Home from './pages/Home';
 import NGOs from './pages/NGOs';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
-import { AuthProvider } from './contexts/AuthContext';
 
 function App() {
   return (
