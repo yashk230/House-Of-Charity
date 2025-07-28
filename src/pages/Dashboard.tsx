@@ -174,28 +174,21 @@ const Dashboard: React.FC = () => {
                     <div key={donation.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                       <div className="flex items-center">
                         <div className="p-2 bg-primary-100 rounded-lg">
-                          {donation.type === 'money' ? (
-                            <DollarSign className="h-5 w-5 text-primary-600" />
-                          ) : (
-                            <Package className="h-5 w-5 text-primary-600" />
-                          )}
+                          <DollarSign className="h-5 w-5 text-primary-600" />
                         </div>
                         <div className="ml-4">
                           <p className="font-medium text-gray-900">
-                            {isDonor ? donation.ngoName : donation.donorName}
+                            {isDonor ? 'NGO' : 'Donor'}
                           </p>
-                          <p className="text-sm text-gray-600">{donation.description}</p>
+                          <p className="text-sm text-gray-600">{donation.message}</p>
                         </div>
                       </div>
                       <div className="text-right">
                         <p className="font-medium text-gray-900">
-                          {donation.type === 'money' 
-                            ? `$${donation.amount}` 
-                            : `${donation.quantity} ${donation.unit}`
-                          }
+                          ${donation.amount}
                         </p>
                         <p className="text-sm text-gray-600">
-                          {new Date(donation.createdAt).toLocaleDateString()}
+                          {new Date(donation.created_at).toLocaleDateString()}
                         </p>
                         <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
                           donation.status === 'confirmed' ? 'bg-green-100 text-green-800' :
