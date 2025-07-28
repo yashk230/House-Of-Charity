@@ -51,7 +51,7 @@ const NGOs: React.FC = () => {
       },
     ];
 
-    setNGOs(mockNGOs);
+    setNgos(mockNGOs);
     setFilteredNGOs(mockNGOs);
     setLoading(false);
   }, []);
