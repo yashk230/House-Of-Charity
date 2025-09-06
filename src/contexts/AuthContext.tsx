@@ -1,16 +1,21 @@
-// import { User as SupabaseUser, Session } from '@supabase/supabase-js';
-import React, { createContext, useContext, useState } from 'react';
-// import { supabase } from '../supabase/config';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { apiService } from '../api/database';
 import { Donor, NGO } from '../types';
 
-// Temporary types until Supabase is installed
-type SupabaseUser = {
+// User type for authentication
+type AuthUser = {
   id: string;
   email: string;
+  user_type: string;
+  name?: string;
+  phone?: string;
+  city?: string;
+  state?: string;
+  description?: string;
 };
 
 interface AuthContextType {
-  currentUser: SupabaseUser | null;
+  currentUser: AuthUser | null;
   userProfile: Donor | NGO | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
@@ -30,34 +35,77 @@ export const useAuth = () => {
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState<SupabaseUser | null>(null);
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
   const [userProfile, setUserProfile] = useState<Donor | NGO | null>(null);
-  const [loading] = useState(false); // Set to false for now
+  const [loading, setLoading] = useState(true);
 
-  // Temporary mock implementation until Supabase is properly set up
+  // Check for existing token on app load
+  useEffect(() => {
+    const checkAuth = async () => {
+      if (apiService.isAuthenticated()) {
+        try {
+          const response = await apiService.verifyToken();
+          setCurrentUser(response.user);
+          setUserProfile(response.user as Donor | NGO);
+        } catch (error) {
+          console.error('Token verification failed:', error);
+          apiService.logout();
+        }
+      }
+      setLoading(false);
+    };
+
+    checkAuth();
+  }, []);
+
   const login = async (email: string, password: string) => {
-    // Mock login - will be replaced with Supabase
-    console.log('Mock login:', email, password);
-    throw new Error('Supabase not configured yet');
+    try {
+      setLoading(true);
+      const response = await apiService.login(email, password);
+      setCurrentUser(response.user);
+      setUserProfile(response.user as Donor | NGO);
+    } catch (error) {
+      throw error;
+    } finally {
+      setLoading(false);
+    }
   };
 
   const register = async (email: string, password: string, userData: Partial<Donor | NGO>) => {
-    // Mock register - will be replaced with Supabase
-    console.log('Mock register:', email, password, userData);
-    throw new Error('Supabase not configured yet');
+    try {
+      setLoading(true);
+      const response = await apiService.register(email, password, userData);
+      setCurrentUser(response.user);
+      setUserProfile(response.user as Donor | NGO);
+    } catch (error) {
+      throw error;
+    } finally {
+      setLoading(false);
+    }
   };
 
   const logout = async () => {
-    // Mock logout - will be replaced with Supabase
-    console.log('Mock logout');
-    setCurrentUser(null);
-    setUserProfile(null);
+    try {
+      apiService.logout();
+      setCurrentUser(null);
+      setUserProfile(null);
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   };
 
   const updateProfile = async (data: Partial<Donor | NGO>) => {
-    // Mock update - will be replaced with Supabase
-    console.log('Mock update profile:', data);
-    throw new Error('Supabase not configured yet');
+    if (!currentUser) {
+      throw new Error('No user logged in');
+    }
+
+    try {
+      const response = await apiService.updateUser(currentUser.id, data);
+      setUserProfile(response.user);
+      setCurrentUser({ ...currentUser, ...response.user });
+    } catch (error) {
+      throw error;
+    }
   };
 
   const value: AuthContextType = {
